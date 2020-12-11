@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+
+<script>
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
+
+function myFunction() {
+  userlist = [
+	"François",
+	"Lionel",
+	"Nicolas",
+	"Lucie",
+	"Claire",
+	"Celine"
+	]
+  user_selected = Math.floor(Math.random() * userlist.length)   
+	console.log(user_selected);
+
+  document.getElementById("name").innerHTML = "10";
+	sleep(1000);
+  document.getElementById("name").innerHTML = userlist[user_selected];
+}
+</script>
+
+<body>
+<center>	
+<h1> A qui le tour ? :) </h1>
+	<h2 id="name"> </h2>
+<button type="button" onclick="myFunction()"><h1>A MOAAAAA </h1></button>
+
+</center>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
