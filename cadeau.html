@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 
 <html>
-
 <script>
+userlist = [
+
+];
+
+let userCount = new Map();
+</script>
+<script>
+
+
+
 function sleep(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
@@ -12,48 +21,120 @@ function sleep(milliseconds) {
   }
 }
 
+function Delete(key) {
+  console.log(userCount.get(key));
+  userCount.delete(key);
+  if(userCount.size < 1){
+    document.getElementById("playButton").style.visibility="hidden";
+    document.getElementById("tableID").style.visibility="hidden";
 
-function myFunction() {
-  userlist = [
-	"François",
-	"Lionel",
-	"Nicolas",
-	"Lucie",
-	"Claire",
-	"Celine"
-	]
-  user_selected = Math.floor(Math.random() * userlist.length)   
-	console.log(user_selected);
+  }
+  var table = document.getElementById("tableID");
+  for (var r = 0, n = table.rows.length; r < n; r++) {
+    var c = 0 ;
+      if(table.rows[r].cells[c].innerHTML == key){
+        for (var c2 = 0, m = table.rows[r].cells.length;c2 < m; c++) {
 
-  document.getElementById("name").innerHTML = "10";
+          element = table.rows[r].cells[c2];
+          parentEl = element.parentElement;
+          parentEl.removeChild(element);
+      }
+      // for (var c = 0, m = table.rows[r].cells.length; c < m; c++) {
+          // console.log(table.rows[r].cells[c].innerHTML);
+      // }
+  }
+ }
+}
+
+function addLine(key) {
+  var refTable = document.getElementById("tableID");
+  console.log(refTable);
+  var nouvelleLigne = refTable.insertRow();
+
+  // Insère une cellule dans la ligne à l'indice 0
+  var NameCell = nouvelleLigne.insertCell(0);
+  var NameText = document.createTextNode(key);
+  var CountCell = nouvelleLigne.insertCell(1);
+  var CountText = document.createTextNode(userCount.get(key));
+  var  DeleteButton = '<button onclick="Delete(key)">delete </button>';
+  var DeleteCell = nouvelleLigne.insertCell();
+  var DeleteText = document.createElement("button");
+  DeleteText.setAttribute("onclick","Delete('" +key + "');");
+  DeleteText.innerText = "delete";
+
+  NameCell.appendChild(NameText);
+  CountCell.appendChild(CountText);
+  DeleteCell.appendChild(DeleteText);
+
+}
+
+function getRandomKey(collection) {
+    let keys = Array.from(collection.keys());
+    return keys[Math.floor(Math.random() * keys.length)];
+}
+function addPlayer(){
+  name = document.getElementById("add_player").value;
+  count = document.getElementById("player_count").value;
+  userCount.set(name,count);
+  addLine(name);
+  document.getElementById("playButton").style.visibility="visible";
+  document.getElementById("tableID").style.visibility="visible";
+
+}
+
+function pick() {
+  selected_key = getRandomKey(userCount);
+  new_value = userCount.get(selected_key) - 1;
+  document.getElementById("name").innerHTML = "Loading";
 	sleep(1000);
-  document.getElementById("name").innerHTML = userlist[user_selected];
+  document.getElementById("name").innerHTML = selected_key;
+  document.getElementById("count").innerHTML = new_value;
+  if (new_value < 1){
+    userCount.delete(selected_key);
+  }
+  else{
+    userCount.set(selected_key,userCount.get(selected_key) - 1);
+  }
+
+}
+function play(){
+  if(userCount.size > 0){
+    document.getElementById("playDiv").style.visibility="visible";
+    document.getElementById("signupDiv").style.visibility="hidden";
+    document.getElementById("tableID").style.visibility="hidden";
+    document.getElementById("playButton").style.visibility="hidden";
+  }
 }
 </script>
 
-<body>
-<center>	
-<h1> A qui le tour ? :) </h1>
-	<h2 id="name"> </h2>
-<button type="button" onclick="myFunction()"><h1>A MOAAAAA </h1></button>
 
+<body>
+<center>
+    <div id="playDiv" style="visibility: hidden;">
+      <h1> Who want a gift ??</h1>
+      	<h2 id="name"> </h2>
+        <h2 id="count"> </h2>
+      <button type="button" onclick="pick()"><h1>Me me me me ! </h1></button>
+    </div>
+
+<div id="signupDiv">
+  <h1>Let's set up names and number of gifts ! </h1>
+  <Form id="edit-form">
+    <input id="add_player" type="text" placeholder="name" />
+    <input id="player_count" type="number" placeholder="number of gift(s)"/>
+    <button type="button" onclick="addPlayer()"> <h1>Add player </h1></button>
+  </Form>
+  <hr style="height:30px; visibility: hidden;">
+  <div>
+  <table id="tableID" style="visibility: hidden;">
+    <tr>
+      <th>Name</th><th>Number of gift(s)</th> <th>Delete button </th>
+    </tr>
+
+</table>
+  </div>
+</div>
+  <button type="button" id="playButton" onclick="play()" style="visibility: hidden;"> <h1> Start Playing now !  </h1> <//button>
 </center>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
